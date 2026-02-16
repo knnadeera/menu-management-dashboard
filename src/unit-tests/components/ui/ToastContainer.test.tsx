@@ -16,7 +16,7 @@ describe("ToastContainer component", () => {
 
   it("renders toasts and auto-dismisses after duration", async () => {
     const user = userEvent.setup();
-    const id = useToastStore.getState().addToast("Saved", "success", 1000);
+    useToastStore.getState().addToast("Saved", "success", 1000);
     render(<ToastContainer />);
     expect(screen.getByText("Saved")).toBeInTheDocument();
     await user.click(screen.getByLabelText("Dismiss"));
@@ -25,7 +25,7 @@ describe("ToastContainer component", () => {
 
   it("removes toast when dismiss button is clicked", async () => {
     const user = userEvent.setup();
-    const id = useToastStore.getState().addToast("Dismiss me", "info", 4000);
+    useToastStore.getState().addToast("Dismiss me", "info", 4000);
     render(<ToastContainer />);
     await user.click(screen.getByLabelText("Dismiss"));
     expect(useToastStore.getState().toasts.length).toBe(0);
