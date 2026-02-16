@@ -1,0 +1,52 @@
+import { TSortField } from "@/types/menu.types";
+import { useMenuStore } from "@/stores/menuStore";
+
+const sortOptions: { label: string; field: TSortField }[] = [
+  { label: "Name", field: "name" },
+  { label: "Price", field: "price" },
+  { label: "Category", field: "category" },
+];
+
+const SortButtons = () => {
+  const sortField = useMenuStore((s) => s.sortField);
+  const sortDirection = useMenuStore((s) => s.sortDirection);
+  const setSorting = useMenuStore((s) => s.setSorting);
+
+  return (
+    <div className="flex items-center gap-2">
+      <span className="text-sm text-gray-500 whitespace-nowrap">Sort by:</span>
+      {sortOptions.map((opt) => (
+        <button
+          key={opt.field}
+          onClick={() => setSorting(opt.field)}
+          className={`inline-flex items-center gap-1 px-3 py-2 rounded-lg text-sm font-medium transition-colors cursor-pointer ${
+            sortField === opt.field
+              ? "bg-indigo-100 text-indigo-700"
+              : "bg-gray-100 text-gray-600 hover:bg-gray-200"
+          }`}
+        >
+          {opt.label}
+          {sortField === opt.field && (
+            <svg
+              className={`w-4 h-4 transition-transform ${
+                sortDirection === "desc" ? "rotate-180" : ""
+              }`}
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M5 15l7-7 7 7"
+              />
+            </svg>
+          )}
+        </button>
+      ))}
+    </div>
+  );
+};
+
+export default SortButtons;
