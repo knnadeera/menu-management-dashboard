@@ -72,6 +72,7 @@ npx vitest src/unit-tests/path/to/file.test.tsx  # run a single test file
 ```
 
 Guidelines:
+
 - Add new unit tests under `src/unit-tests/` following the existing folder structure.
 - Name test files `*.test.ts` or `*.test.tsx` next to the logical area under `src/unit-tests/`.
 - Use React Testing Library for components and vitest `vi` for mocks/stubs.

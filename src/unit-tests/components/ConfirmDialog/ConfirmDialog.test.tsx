@@ -4,7 +4,6 @@ import userEvent from "@testing-library/user-event";
 import ConfirmDialog from "@/components/ConfirmDialog/ConfirmDialog";
 import { useUIStore } from "@/stores/uiStore";
 import { useMenuStore } from "@/stores/menuStore";
-import { menuService } from "@/services/menuService";
 import type { IMenuItem } from "@/types/menu.types";
 
 vi.mock("@/services/menuService", () => ({
