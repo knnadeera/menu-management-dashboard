@@ -11,10 +11,9 @@ type ConfirmDialogProps = {
 const ConfirmDialog = ({ label, message, onConfirm }: ConfirmDialogProps) => {
   const isConfirmOpen = useUIStore((s) => s.isConfirmOpen);
   const deletingItemId = useUIStore((s) => s.deletingItemId);
-  const confirmType = useUIStore((s) => s.confirmType);
+  const confirmMessage = useUIStore((s) => s.confirmMessage);
+  const confirmCallback = useUIStore((s) => s.confirmCallback);
   const items = useMenuStore((s) => s.items);
-  const deleteItem = useMenuStore((s) => s.deleteItem);
-  const toggleAvailability = useMenuStore((s) => s.toggleAvailability);
   const closeConfirmDialog = useUIStore((s) => s.closeConfirmDialog);
 
   const dialogRef = useRef<HTMLDialogElement | null>(null);
@@ -59,7 +58,7 @@ const ConfirmDialog = ({ label, message, onConfirm }: ConfirmDialogProps) => {
     };
   }, [isConfirmOpen, closeConfirmDialog]);
 
-  if (!isConfirmOpen || !deletingItemId) return null;
+  if (!isConfirmOpen) return null;
 
   const item = items.find((i) => i.id === deletingItemId);
 
@@ -99,20 +98,19 @@ const ConfirmDialog = ({ label, message, onConfirm }: ConfirmDialogProps) => {
         </div>
 
         <h3 id={titleId} className="text-lg font-bold text-gray-900 mb-1">
-          {label ?? (confirmType === "toggle" ? "Change Status" : "Delete")}{" "}
-          Item
+          {label ?? "Confirm"}
         </h3>
         <p className="text-sm text-gray-500 mb-6">
-          Are you sure you want to{" "}
-          {(
-            label ?? (confirmType === "toggle" ? "change status of" : "delete")
-          ).toLowerCase()}{" "}
-          <span className="font-semibold text-gray-700">{item?.name}</span>?
-          {message ?? ""}
-          {confirmType === "delete" && (
-            <div className="mt-2 text-sm font-semibold text-red-600">
-              This action cannot be undone.
-            </div>
+          {confirmMessage ?? message ?? (
+            <>
+              Are you sure?
+              {item && (
+                <span className="font-semibold text-gray-700">
+                  {" "}
+                  {item.name}?
+                </span>
+              )}
+            </>
           )}
         </p>
 
@@ -125,24 +123,16 @@ const ConfirmDialog = ({ label, message, onConfirm }: ConfirmDialogProps) => {
           </button>
           <button
             onClick={() => {
-              if (onConfirm) {
+              if (confirmCallback) {
+                confirmCallback(deletingItemId ?? null);
+              } else if (onConfirm) {
                 onConfirm(deletingItemId);
-                closeConfirmDialog();
-                return;
               }
-
-              if (confirmType === "toggle") {
-                if (deletingItemId != null) toggleAvailability(deletingItemId);
-                closeConfirmDialog();
-                return;
-              }
-
-              if (deletingItemId != null) deleteItem(deletingItemId);
               closeConfirmDialog();
             }}
-            className={`flex-1 px-4 py-2.5 rounded-lg text-sm font-medium text-white ${confirmType === "delete" ? "bg-red-600 hover:bg-red-700" : "bg-amber-600 hover:bg-amber-700"} transition shadow-sm`}
+            className="flex-1 px-4 py-2.5 rounded-lg text-sm font-medium text-white bg-amber-600 hover:bg-amber-700 transition shadow-sm"
           >
-            {label ?? (confirmType === "toggle" ? "Confirm" : "Delete")}
+            {label ?? "Confirm"}
           </button>
         </div>
       </dialog>
