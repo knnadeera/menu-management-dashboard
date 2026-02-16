@@ -12,7 +12,6 @@ interface Props extends BaseProps {
   errorClassName?: string;
   required?: boolean;
 
-  // child-side helpers
   onClearError?: () => void;
   validateOnChange?: (value: string) => boolean;
 }

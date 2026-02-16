@@ -23,7 +23,6 @@ describe("uiStore", () => {
     });
   });
 
-  // --- Modal ---
   it("openAddModal sets isModalOpen=true and editingItem=null", () => {
     useUIStore.getState().openAddModal();
     const s = useUIStore.getState();
@@ -46,7 +45,6 @@ describe("uiStore", () => {
     expect(s.editingItem).toBeNull();
   });
 
-  // --- Confirm dialog ---
   it("openConfirmDialog sets confirm state (default delete)", () => {
     useUIStore.getState().openConfirmDialog(42);
     const s = useUIStore.getState();

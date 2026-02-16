@@ -2,10 +2,8 @@ import { describe, it, expect, vi, beforeEach } from "vitest";
 import { menuService } from "@/services/menuService";
 import { mockMenuItems } from "@/data/mockData";
 
-// Speed up tests by removing delay
 vi.mock("@/services/menuService", async (importOriginal) => {
   const mod = await importOriginal<typeof import("@/services/menuService")>();
-  // We want the actual implementation but with no delay
   return mod;
 });
 
@@ -19,7 +17,6 @@ describe("menuService", () => {
     vi.advanceTimersByTime(1500);
     const items = await promise;
     expect(items).toHaveLength(mockMenuItems.length);
-    // Should be copies, not the same references
     expect(items[0]).not.toBe(mockMenuItems[0]);
     expect(items[0]).toEqual(mockMenuItems[0]);
   });
@@ -47,7 +44,6 @@ describe("menuService", () => {
     const updated = await promise;
     expect(updated.id).toBe(1);
     expect(updated.name).toBe("Updated Salmon");
-    // Original fields preserved
     expect(updated.category).toBe("Main Courses");
   });
 

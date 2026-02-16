@@ -33,16 +33,14 @@ describe("MenuItemBody component", () => {
 
   it("displays LKR price by default", () => {
     render(<MenuItemBody item={item} />);
-    // formatLKR(2800) → e.g. "LKR 2,800.00"
+
     expect(screen.getByText(/2,800\.00/)).toBeInTheDocument();
   });
 
   it("displays converted price when non-LKR currency selected", () => {
     useCurrencyStore.setState({ selected: "USD" });
     render(<MenuItemBody item={item} />);
-    // Should show $ sign for USD
     expect(screen.getByText(/\$/)).toBeInTheDocument();
-    // Should also show LKR fallback
     expect(screen.getByText(/2,800\.00/)).toBeInTheDocument();
   });
 });

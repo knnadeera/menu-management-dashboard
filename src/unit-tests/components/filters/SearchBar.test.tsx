@@ -33,7 +33,6 @@ describe("SearchBar component", () => {
     render(<SearchBar />);
     const input = screen.getByPlaceholderText("Search menu items...");
     await user.type(input, "salmon");
-    // Advance past debounce
     vi.advanceTimersByTime(350);
     expect(useMenuStore.getState().searchQuery).toBe("salmon");
   });
@@ -43,7 +42,6 @@ describe("SearchBar component", () => {
     render(<SearchBar />);
     const input = screen.getByPlaceholderText("Search menu items...");
     await user.type(input, "test");
-    // The clear button should appear
     const buttons = screen.getAllByRole("button");
     expect(buttons.length).toBeGreaterThan(0);
   });

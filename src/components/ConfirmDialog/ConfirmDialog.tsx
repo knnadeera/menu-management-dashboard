@@ -33,9 +33,7 @@ const ConfirmDialog = ({ label, message, onConfirm }: ConfirmDialogProps) => {
     ) {
       try {
         dialogRef.current.showModal();
-      } catch {
-        /* ignore */
-      }
+      } catch {}
     }
     dialogRef.current?.focus();
 
@@ -52,9 +50,7 @@ const ConfirmDialog = ({ label, message, onConfirm }: ConfirmDialogProps) => {
       if (dialogRef.current && typeof dialogRef.current.close === "function") {
         try {
           dialogRef.current.close();
-        } catch {
-          /* ignore */
-        }
+        } catch {}
       }
     };
   }, [isConfirmOpen, closeConfirmDialog]);
@@ -65,7 +61,6 @@ const ConfirmDialog = ({ label, message, onConfirm }: ConfirmDialogProps) => {
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
-      {/* Backdrop */}
       <button
         type="button"
         className="absolute inset-0 bg-black/50 backdrop-blur-sm"
@@ -73,7 +68,6 @@ const ConfirmDialog = ({ label, message, onConfirm }: ConfirmDialogProps) => {
         aria-label="Close confirm dialog"
       />
 
-      {/* Dialog */}
       <dialog
         ref={dialogRef}
         open
@@ -81,7 +75,6 @@ const ConfirmDialog = ({ label, message, onConfirm }: ConfirmDialogProps) => {
         tabIndex={-1}
         className="relative bg-white rounded-2xl shadow-2xl w-full max-w-sm p-6 text-center"
       >
-        {/* Icon */}
         <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-full bg-red-100">
           <svg
             className="h-7 w-7 text-red-600"

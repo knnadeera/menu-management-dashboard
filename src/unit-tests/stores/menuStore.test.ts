@@ -5,7 +5,6 @@ import { useToastStore } from "@/stores/toastStore";
 import { menuService } from "@/services/menuService";
 import type { IMenuItem } from "@/types/menu.types";
 
-// Mock the service so tests don't wait on delays
 vi.mock("@/services/menuService", () => ({
   menuService: {
     fetchMenuItems: vi.fn().mockResolvedValue([]),
@@ -46,7 +45,6 @@ const sampleItems: IMenuItem[] = [
 describe("menuStore", () => {
   beforeEach(() => {
     vi.clearAllMocks();
-    // Reset stores
     useMenuStore.setState({
       items: [...sampleItems],
       loading: false,
@@ -65,7 +63,6 @@ describe("menuStore", () => {
     useToastStore.setState({ toasts: [] });
   });
 
-  // --- Filter / search helpers ---
   describe("setSearchQuery", () => {
     it("updates searchQuery", () => {
       useMenuStore.getState().setSearchQuery("test");
@@ -89,9 +86,9 @@ describe("menuStore", () => {
     });
 
     it("toggles direction when same field clicked again", () => {
-      useMenuStore.getState().setSorting("name"); // was asc → desc
+      useMenuStore.getState().setSorting("name");
       expect(useMenuStore.getState().sortDirection).toBe("desc");
-      useMenuStore.getState().setSorting("name"); // desc → asc
+      useMenuStore.getState().setSorting("name");
       expect(useMenuStore.getState().sortDirection).toBe("asc");
     });
 
@@ -103,7 +100,6 @@ describe("menuStore", () => {
     });
   });
 
-  // --- getFilteredItems ---
   describe("getFilteredItems", () => {
     it("returns all items when no filters", () => {
       const filtered = useMenuStore.getState().getFilteredItems();
@@ -146,7 +142,7 @@ describe("menuStore", () => {
     });
 
     it("sorts by name descending", () => {
-      useMenuStore.getState().setSorting("name"); // toggle to desc
+      useMenuStore.getState().setSorting("name");
       const filtered = useMenuStore.getState().getFilteredItems();
       expect(filtered[0].name).toBe("Charlie");
       expect(filtered[2].name).toBe("Alpha");
@@ -172,7 +168,6 @@ describe("menuStore", () => {
     });
   });
 
-  // --- addItem ---
   describe("addItem", () => {
     it("optimistically adds item, then replaces with server response", async () => {
       const created: IMenuItem = {
@@ -196,7 +191,6 @@ describe("menuStore", () => {
       const items = useMenuStore.getState().items;
       expect(items).toHaveLength(4);
       expect(items.find((i) => i.id === "server-1")).toBeDefined();
-      // Toast should be added
       expect(useToastStore.getState().toasts[0].message).toBe("Item added");
     });
 
@@ -215,7 +209,6 @@ describe("menuStore", () => {
         }),
       ).rejects.toThrow("fail");
 
-      // Should be back to original 3 items
       expect(useMenuStore.getState().items).toHaveLength(3);
       expect(useToastStore.getState().toasts[0].message).toBe(
         "Failed to add item",
@@ -223,7 +216,6 @@ describe("menuStore", () => {
     });
   });
 
-  // --- updateItem ---
   describe("updateItem", () => {
     it("optimistically updates and confirms with server", async () => {
       const updated: IMenuItem = { ...sampleItems[0], name: "Alpha Updated" };
@@ -246,7 +238,7 @@ describe("menuStore", () => {
       ).rejects.toThrow("fail");
 
       const item = useMenuStore.getState().items.find((i) => i.id === 1);
-      expect(item?.name).toBe("Alpha"); // rolled back
+      expect(item?.name).toBe("Alpha");
     });
 
     it("does nothing for non-existent id", async () => {
@@ -255,7 +247,6 @@ describe("menuStore", () => {
     });
   });
 
-  // --- deleteItem ---
   describe("deleteItem", () => {
     it("optimistically removes item", async () => {
       vi.mocked(menuService.deleteMenuItem).mockResolvedValueOnce({
@@ -281,7 +272,6 @@ describe("menuStore", () => {
     });
   });
 
-  // --- toggleAvailability ---
   describe("toggleAvailability", () => {
     it("toggles active to inactive", async () => {
       vi.mocked(menuService.toggleAvailability).mockResolvedValueOnce({
@@ -315,7 +305,7 @@ describe("menuStore", () => {
       ).rejects.toThrow("fail");
 
       const item = useMenuStore.getState().items.find((i) => i.id === 1);
-      expect(item?.status).toBe("active"); // rolled back
+      expect(item?.status).toBe("active");
     });
 
     it("does nothing for non-existent id", async () => {
@@ -324,7 +314,6 @@ describe("menuStore", () => {
     });
   });
 
-  // --- loadItems ---
   describe("loadItems", () => {
     it("fetches items from service", async () => {
       vi.mocked(menuService.fetchMenuItems).mockResolvedValueOnce(sampleItems);
