@@ -1,4 +1,4 @@
-import { describe, it, expect, beforeEach } from "vitest";
+import { describe, it, expect, beforeEach, vi } from "vitest";
 import { useUIStore } from "@/stores/uiStore";
 import type { IMenuItem } from "@/types/menu.types";
 
@@ -23,7 +23,6 @@ describe("uiStore", () => {
     });
   });
 
-  // --- Modal ---
   it("openAddModal sets isModalOpen=true and editingItem=null", () => {
     useUIStore.getState().openAddModal();
     const s = useUIStore.getState();
@@ -46,13 +45,22 @@ describe("uiStore", () => {
     expect(s.editingItem).toBeNull();
   });
 
-  // --- Confirm dialog ---
   it("openConfirmDialog sets confirm state (default delete)", () => {
     useUIStore.getState().openConfirmDialog(42);
     const s = useUIStore.getState();
     expect(s.isConfirmOpen).toBe(true);
     expect(s.deletingItemId).toBe(42);
     expect(s.confirmType).toBe("delete");
+  });
+
+  it("openConfirmDialog accepts custom message and callback", () => {
+    const cb = vi.fn();
+    useUIStore.getState().openConfirmDialog(null, "unsaved", "Discard?", cb);
+    const s = useUIStore.getState();
+    expect(s.isConfirmOpen).toBe(true);
+    expect(s.confirmType).toBe("unsaved");
+    expect(s.confirmMessage).toBe("Discard?");
+    expect(typeof s.confirmCallback).toBe("function");
   });
 
   it("openConfirmDialog with toggle type", () => {

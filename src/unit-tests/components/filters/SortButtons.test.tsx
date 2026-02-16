@@ -33,7 +33,6 @@ describe("SortButtons component", () => {
   it("toggles sort direction on repeated click", async () => {
     const user = userEvent.setup();
     render(<SortButtons />);
-    // Name is already selected (asc)
     await user.click(screen.getByText("Name"));
     expect(useMenuStore.getState().sortDirection).toBe("desc");
   });

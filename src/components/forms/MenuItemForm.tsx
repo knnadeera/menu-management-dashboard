@@ -12,6 +12,7 @@ const MenuItemForm = () => {
   const isModalOpen = useUIStore((s) => s.isModalOpen);
   const editingItem = useUIStore((s) => s.editingItem);
   const closeModal = useUIStore((s) => s.closeModal);
+  const openConfirmDialog = useUIStore((s) => s.openConfirmDialog);
   const addItem = useMenuStore((s) => s.addItem);
   const updateItem = useMenuStore((s) => s.updateItem);
 
@@ -44,6 +45,44 @@ const MenuItemForm = () => {
     }
     setErrors({});
   }, [editingItem, isModalOpen]);
+
+  const isDirty = () => {
+    const priceNum = price ? Number.parseFloat(price) : 0;
+
+    if (!editingItem) {
+      return (
+        name.trim() !== "" ||
+        description.trim() !== "" ||
+        price.trim() !== "" ||
+        image.trim() !== "" ||
+        status !== "active" ||
+        category !== "Main Courses"
+      );
+    }
+
+    const origPrice = editingItem.price / 100;
+    return (
+      name !== editingItem.name ||
+      description !== editingItem.description ||
+      Math.abs((priceNum || 0) - origPrice) > 0.001 ||
+      image !== (editingItem.image ?? "") ||
+      status !== editingItem.status ||
+      category !== editingItem.category
+    );
+  };
+
+  const handleRequestClose = () => {
+    if (isDirty()) {
+      openConfirmDialog(
+        null,
+        "unsaved",
+        "You have unsaved changes. Discard them?",
+        () => closeModal(),
+      );
+      return;
+    }
+    closeModal();
+  };
 
   const validate = (): boolean => {
     const newErrors: Record<string, string> = {};
@@ -110,10 +149,9 @@ const MenuItemForm = () => {
   return (
     <PopupModal
       title={isEditing ? "Edit Menu Item" : "Add Menu Item"}
-      onCloseModal={closeModal}
+      onCloseModal={handleRequestClose}
     >
       <form onSubmit={handleSubmit} className="p-6 space-y-5">
-        {/* Name */}
         <div>
           <Input
             id="name"
@@ -136,7 +174,6 @@ const MenuItemForm = () => {
           />
         </div>
 
-        {/* Description */}
         <div>
           <Textarea
             id="description"
@@ -159,7 +196,6 @@ const MenuItemForm = () => {
           />
         </div>
 
-        {/* Price & Category row */}
         <div className="grid grid-cols-2 gap-4">
           <div>
             <Input
@@ -200,7 +236,6 @@ const MenuItemForm = () => {
           </div>
         </div>
 
-        {/* Image URL */}
         <div>
           <Input
             id="image"
@@ -240,7 +275,6 @@ const MenuItemForm = () => {
           )}
         </div>
 
-        {/* Status toggle */}
         <label className="flex items-center gap-3 cursor-pointer">
           <input
             id="status-toggle"
@@ -274,12 +308,11 @@ const MenuItemForm = () => {
           </span>
         </label>
 
-        {/* Actions */}
         {errors.form && <p className="text-sm text-red-500">{errors.form}</p>}
         <div className="flex justify-end gap-3 pt-3 border-t border-gray-200">
           <button
             type="button"
-            onClick={closeModal}
+            onClick={handleRequestClose}
             className="px-5 py-2.5 rounded-lg text-sm font-medium text-gray-700 bg-gray-100 hover:bg-gray-200 transition cursor-pointer"
           >
             Cancel
