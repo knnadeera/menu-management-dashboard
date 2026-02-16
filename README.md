@@ -54,6 +54,30 @@ Prerequisites: Node 18+ (or current LTS), npm/yarn/pnpm
 - `npm run build` — compile TypeScript and build production assets
 - `npm run preview` — locally preview production build
 - `npm run lint` — run ESLint
+- `npm test` — run Vitest in watch mode (runs tests under `src/unit-tests/`)
+- `npm run test:run` — run the full test suite once (CI-friendly)
+- `npm run test:coverage` — run tests and collect coverage report
+
+## 🧪 Testing
+
+- Test location: `src/unit-tests/` (tests are organized to mirror `src/` component/service/store layout).
+- Test framework: **Vitest** + React Testing Library + jsdom.
+
+Quick commands:
+
+```bash
+npm test           # watch mode
+npm run test:run   # single run (CI)
+npx vitest src/unit-tests/path/to/file.test.tsx  # run a single test file
+```
+
+Guidelines:
+
+- Add new unit tests under `src/unit-tests/` following the existing folder structure.
+- Name test files `*.test.ts` or `*.test.tsx` next to the logical area under `src/unit-tests/`.
+- Use React Testing Library for components and vitest `vi` for mocks/stubs.
+
+The test runner is configured to only run files under `src/unit-tests/` (see `vite.config.js`).
 
 ## 📁 Project structure (important files)
 
