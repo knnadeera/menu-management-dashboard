@@ -56,21 +56,35 @@ describe("ConfirmDialog component", () => {
       deletingItemId: 1,
       confirmType: "delete",
     });
-    render(<ConfirmDialog />);
+    render(<ConfirmDialog label="Delete" />);
     expect(screen.getByText(/Test Item/)).toBeInTheDocument();
-    expect(screen.getByText("Delete")).toBeInTheDocument();
-    expect(screen.getByText("Cancel")).toBeInTheDocument();
+    expect(screen.getByRole("heading", { name: "Delete" })).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "Delete" })).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "Cancel" })).toBeInTheDocument();
   });
 
-  it("renders dialog with toggle type", () => {
+  it("shows parent-provided label verbatim (no appended 'Item')", () => {
+    useUIStore.setState({
+      isConfirmOpen: true,
+      deletingItemId: 1,
+      confirmType: "delete",
+    });
+    render(<ConfirmDialog label="Remove" />);
+    expect(screen.getByRole("heading", { name: "Remove" })).toBeInTheDocument();
+    expect(screen.queryByText("Remove Item")).toBeNull();
+  });
+
+  it("renders dialog with toggle type (parent provides message)", () => {
     useUIStore.setState({
       isConfirmOpen: true,
       deletingItemId: 1,
       confirmType: "toggle",
     });
-    render(<ConfirmDialog />);
-    expect(screen.getByText(/change status of/i)).toBeInTheDocument();
-    expect(screen.getByText("Confirm")).toBeInTheDocument();
+    render(<ConfirmDialog message={"Change status of Test Item?"} />);
+    expect(
+      screen.getByText(/Change status of Test Item\?/i),
+    ).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "Confirm" })).toBeInTheDocument();
   });
 
   it("closes dialog when Cancel is clicked", async () => {
@@ -94,7 +108,7 @@ describe("ConfirmDialog component", () => {
       confirmType: "delete",
     });
     render(<ConfirmDialog onConfirm={onConfirm} />);
-    await user.click(screen.getByText("Delete"));
+    await user.click(screen.getByRole("button", { name: "Confirm" }));
     expect(onConfirm).toHaveBeenCalledWith(1);
   });
 });
