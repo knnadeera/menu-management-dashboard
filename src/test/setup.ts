@@ -1,6 +1,5 @@
 import "@testing-library/jest-dom/vitest";
 
-// Polyfill crypto.randomUUID for jsdom
 if (typeof globalThis.crypto === "undefined") {
   // @ts-expect-error minimal polyfill
   globalThis.crypto = {};

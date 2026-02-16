@@ -30,9 +30,8 @@ describe("PopupModal component", () => {
         <p>Body</p>
       </PopupModal>,
     );
-    // The close button has aria-label "Close modal"
     const closeButtons = screen.getAllByLabelText("Close modal");
-    await user.click(closeButtons[1]); // The X button (second one)
+    await user.click(closeButtons[1]);
     expect(onClose).toHaveBeenCalledTimes(1);
   });
 
@@ -44,7 +43,6 @@ describe("PopupModal component", () => {
         <p>Body</p>
       </PopupModal>,
     );
-    // The backdrop is the first "Close modal" button
     const closeButtons = screen.getAllByLabelText("Close modal");
     await user.click(closeButtons[0]);
     expect(onClose).toHaveBeenCalledTimes(1);

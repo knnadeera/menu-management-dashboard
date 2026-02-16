@@ -113,7 +113,6 @@ const MenuItemForm = () => {
       onCloseModal={closeModal}
     >
       <form onSubmit={handleSubmit} className="p-6 space-y-5">
-        {/* Name */}
         <div>
           <Input
             id="name"
@@ -136,7 +135,6 @@ const MenuItemForm = () => {
           />
         </div>
 
-        {/* Description */}
         <div>
           <Textarea
             id="description"
@@ -159,7 +157,6 @@ const MenuItemForm = () => {
           />
         </div>
 
-        {/* Price & Category row */}
         <div className="grid grid-cols-2 gap-4">
           <div>
             <Input
@@ -200,7 +197,6 @@ const MenuItemForm = () => {
           </div>
         </div>
 
-        {/* Image URL */}
         <div>
           <Input
             id="image"
@@ -240,7 +236,6 @@ const MenuItemForm = () => {
           )}
         </div>
 
-        {/* Status toggle */}
         <label className="flex items-center gap-3 cursor-pointer">
           <input
             id="status-toggle"
@@ -274,7 +269,6 @@ const MenuItemForm = () => {
           </span>
         </label>
 
-        {/* Actions */}
         {errors.form && <p className="text-sm text-red-500">{errors.form}</p>}
         <div className="flex justify-end gap-3 pt-3 border-t border-gray-200">
           <button

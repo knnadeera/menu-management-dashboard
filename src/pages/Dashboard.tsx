@@ -1,8 +1,13 @@
 import { useMenuStore } from "@/stores/menuStore";
 import { useUIStore } from "@/stores/uiStore";
-import { SearchBar, CategoryFilter, SortButtons } from "@/components/filters";
+import {
+  SearchBar,
+  CategoryFilter,
+  SortButtons,
+  AvailabilityFilter,
+} from "@/components/filters";
 import { MenuItemCard, MenuItemCardSkeleton } from "@/components/dashboard";
-import { CurrencySelector } from "@/components/ui";
+import { CurrencySelector, StatsCards } from "@/components/ui";
 
 const Dashboard = () => {
   const openAddModal = useUIStore((s) => s.openAddModal);
@@ -64,7 +69,6 @@ const Dashboard = () => {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      {/* Header */}
       <header className="bg-white border-b border-gray-200 shadow-sm">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
           <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
@@ -110,7 +114,6 @@ const Dashboard = () => {
                 Add Item
               </button>
 
-              {/* currency selector */}
               <div className="hidden sm:block">
                 <CurrencySelector />
               </div>
@@ -120,50 +123,21 @@ const Dashboard = () => {
       </header>
 
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        {/* Stats cards */}
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
-          {[
-            {
-              label: "Total Items",
-              value: stats.total,
-              color: "bg-indigo-50 text-indigo-700",
-            },
-            {
-              label: "Available",
-              value: stats.available,
-              color: "bg-green-50 text-green-700",
-            },
-            {
-              label: "Unavailable",
-              value: stats.unavailable,
-              color: "bg-red-50 text-red-700",
-            },
-            {
-              label: "Categories",
-              value: stats.categories,
-              color: "bg-amber-50 text-amber-700",
-            },
-          ].map((stat) => (
-            <div key={stat.label} className={`rounded-xl p-4 ${stat.color}`}>
-              <p className="text-sm font-medium opacity-80">{stat.label}</p>
-              <p className="text-2xl font-bold mt-1">{stat.value}</p>
-            </div>
-          ))}
-        </div>
+        <StatsCards stats={stats} />
 
-        {/* Filters */}
         <div className="space-y-4 mb-8">
           <div className="flex flex-col md:flex-row gap-4">
             <div className="flex-1">
               <SearchBar />
             </div>
-            {/* Sort buttons */}
             <SortButtons />
           </div>
-          <CategoryFilter />
+          <div className="flex flex-wrap items-center gap-4 justify-between">
+            <CategoryFilter />
+            <AvailabilityFilter />
+          </div>
         </div>
 
-        {/* Items grid */}
         {itemsContent}
       </main>
     </div>

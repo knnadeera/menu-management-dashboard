@@ -12,7 +12,6 @@ describe("CurrencySelector component", () => {
       loading: false,
       error: null,
     });
-    // Suppress fetch calls from useEffect
     globalThis.fetch = vi.fn().mockResolvedValue({
       ok: true,
       json: () => Promise.resolve({ rates: { LKR: 1, USD: 0.003 } }),

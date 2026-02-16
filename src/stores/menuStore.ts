@@ -10,11 +10,13 @@ interface MenuStore {
 
   searchQuery: string;
   selectedCategory: string;
+  selectedAvailability: string;
   sortField: TSortField;
   sortDirection: TSortDirection;
 
   setSearchQuery: (query: string) => void;
   setSelectedCategory: (category: string) => void;
+  setSelectedAvailability: (availability: string) => void;
   setSorting: (field: TSortField) => void;
 
   addItem: (item: Omit<IMenuItem, "id">) => Promise<void>;
@@ -40,11 +42,14 @@ export const useMenuStore = create<MenuStore>((set, get) => {
 
     searchQuery: "",
     selectedCategory: "All",
+    selectedAvailability: "All",
     sortField: "name",
     sortDirection: "asc",
 
     setSearchQuery: (query) => set({ searchQuery: query }),
     setSelectedCategory: (category) => set({ selectedCategory: category }),
+    setSelectedAvailability: (availability) =>
+      set({ selectedAvailability: availability }),
 
     setSorting: (field) =>
       set((state) => ({
@@ -158,6 +163,7 @@ export const useMenuStore = create<MenuStore>((set, get) => {
         itemsRef: null as IMenuItem[] | null,
         searchQuery: "",
         selectedCategory: "All",
+        selectedAvailability: "All",
         sortField: "name" as TSortField,
         sortDirection: "asc" as TSortDirection,
       };
@@ -167,6 +173,7 @@ export const useMenuStore = create<MenuStore>((set, get) => {
           items,
           searchQuery,
           selectedCategory,
+          selectedAvailability,
           sortField,
           sortDirection,
         } = get();
@@ -175,6 +182,7 @@ export const useMenuStore = create<MenuStore>((set, get) => {
           _lastDeps.itemsRef === items &&
           _lastDeps.searchQuery === searchQuery &&
           _lastDeps.selectedCategory === selectedCategory &&
+          _lastDeps.selectedAvailability === selectedAvailability &&
           _lastDeps.sortField === sortField &&
           _lastDeps.sortDirection === sortDirection;
 
@@ -197,6 +205,12 @@ export const useMenuStore = create<MenuStore>((set, get) => {
           );
         }
 
+        if (selectedAvailability === "Available") {
+          filtered = filtered.filter((item) => item.status === "active");
+        } else if (selectedAvailability === "Unavailable") {
+          filtered = filtered.filter((item) => item.status !== "active");
+        }
+
         filtered = [...filtered].sort((a, b) => {
           let comparison = 0;
           if (sortField === "name") {
@@ -213,6 +227,7 @@ export const useMenuStore = create<MenuStore>((set, get) => {
         _lastDeps.itemsRef = items;
         _lastDeps.searchQuery = searchQuery;
         _lastDeps.selectedCategory = selectedCategory;
+        _lastDeps.selectedAvailability = selectedAvailability;
         _lastDeps.sortField = sortField;
         _lastDeps.sortDirection = sortDirection;
 
