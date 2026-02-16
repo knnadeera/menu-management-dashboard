@@ -20,7 +20,7 @@ export const mockMenuItems: IMenuItem[] = [
     status: "active",
     description: "Crisp romaine lettuce with house-made dressing and croutons",
     image:
-      "https://media.istockphoto.com/id/1211166166/photo/caesar-salad-with-grilled-chicken-and-croutons-of-bread.jpg?s=612x612&w=0&k=20&c=anNWizfxset3nOpS9zxGU1PCgn6dBwILhqYIED4qxYY=",
+      "https://www.onceuponachef.com/images/2010/08/Homemade-Caesar-Salad-Dressing.jpg",
   },
   {
     id: 3,
