@@ -41,7 +41,7 @@ const MenuItemHeader = ({ item }: Props) => {
         {item.status === "active" ? "Active" : "Inactive"}
       </span>
 
-      <span className="absolute top-3 left-3 px-2.5 py-1 rounded-full text-xs font-semibold bg-indigo-100 text-indigo-800">
+      <span className="absolute top-3 left-3 px-2.5 py-1 rounded-full text-xs font-semibold bg-blue-100 text-blue-800">
         {item.category}
       </span>
     </div>

@@ -1,6 +1,7 @@
 import { useEffect, useRef, useId } from "react";
+import { useShallow } from "zustand/react/shallow";
 import { useMenuStore } from "@/stores/menuStore";
-import { useUIStore } from "@/stores/uiStore";
+import { useUIStore, uiConfirmSelector } from "@/stores/uiStore";
 
 type ConfirmDialogProps = {
   label?: string;
@@ -9,12 +10,14 @@ type ConfirmDialogProps = {
 };
 
 const ConfirmDialog = ({ label, message, onConfirm }: ConfirmDialogProps) => {
-  const isConfirmOpen = useUIStore((s) => s.isConfirmOpen);
-  const deletingItemId = useUIStore((s) => s.deletingItemId);
-  const confirmMessage = useUIStore((s) => s.confirmMessage);
-  const confirmCallback = useUIStore((s) => s.confirmCallback);
+  const {
+    isConfirmOpen,
+    deletingItemId,
+    confirmMessage,
+    confirmCallback,
+    closeConfirmDialog,
+  } = useUIStore(useShallow(uiConfirmSelector));
   const items = useMenuStore((s) => s.items);
-  const closeConfirmDialog = useUIStore((s) => s.closeConfirmDialog);
 
   const dialogRef = useRef<HTMLDialogElement | null>(null);
   const previouslyFocused = useRef<HTMLElement | null>(null);

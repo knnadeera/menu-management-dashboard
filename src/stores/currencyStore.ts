@@ -49,4 +49,12 @@ export const SUPPORTED_CURRENCIES = [
   { code: "INR", label: "INR" },
 ];
 
+export const currencyDashboardSelector = (s: CurrencyStore) => ({
+  selected: s.selected,
+  setSelected: s.setSelected,
+  rates: s.rates,
+  loading: s.loading,
+  refreshRates: s.refreshRates,
+});
+
 export default useCurrencyStore;

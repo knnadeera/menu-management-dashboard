@@ -28,7 +28,7 @@ const MenuItemActions = ({
 
       <button
         onClick={() => onEdit(item)}
-        className="p-1.5 rounded-lg text-gray-500 hover:bg-gray-100 hover:text-indigo-600 transition-colors cursor-pointer"
+        className="p-1.5 rounded-lg text-gray-500 hover:bg-gray-100 hover:text-blue-600 transition-colors cursor-pointer"
         title="Edit"
       >
         <svg

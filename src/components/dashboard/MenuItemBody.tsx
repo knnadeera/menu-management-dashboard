@@ -1,14 +1,19 @@
 import type { IMenuItem } from "@/types/menu.types";
+import { useShallow } from "zustand/react/shallow";
 import { formatLKR, formatFromLKR } from "@/utils/currency";
-import { useCurrencyStore } from "@/stores/currencyStore";
+import {
+  useCurrencyStore,
+  currencyDashboardSelector,
+} from "@/stores/currencyStore";
 
 interface Props {
   readonly item: IMenuItem;
 }
 
 const MenuItemBody = ({ item }: Props) => {
-  const selected = useCurrencyStore((s) => s.selected);
-  const rates = useCurrencyStore((s) => s.rates);
+  const { selected, rates } = useCurrencyStore(
+    useShallow(currencyDashboardSelector),
+  );
 
   const priceDisplay =
     selected === "LKR"
@@ -22,7 +27,7 @@ const MenuItemBody = ({ item }: Props) => {
           {item.name}
         </h3>
         <div className="text-right">
-          <div className="text-lg font-bold text-indigo-600 ml-2 whitespace-nowrap">
+          <div className="text-lg font-bold text-blue-600 ml-2 whitespace-nowrap">
             {priceDisplay}
           </div>
           {selected !== "LKR" && (
