@@ -236,3 +236,28 @@ export const useMenuStore = create<MenuStore>((set, get) => {
     })(),
   };
 });
+
+export const menuDashboardSelector = (s: MenuStore) => ({
+  items: s.items,
+  loading: s.loading,
+  filteredItems: s.getFilteredItems(),
+  searchQuery: s.searchQuery,
+  setSearchQuery: s.setSearchQuery,
+  sortField: s.sortField,
+  sortDirection: s.sortDirection,
+  setSorting: s.setSorting,
+  selectedCategory: s.selectedCategory,
+  setSelectedCategory: s.setSelectedCategory,
+  selectedAvailability: s.selectedAvailability,
+  setSelectedAvailability: s.setSelectedAvailability,
+});
+
+export const menuFormSelector = (s: MenuStore) => ({
+  addItem: s.addItem,
+  updateItem: s.updateItem,
+});
+
+export const menuCardSelector = (s: MenuStore) => ({
+  toggleAvailability: s.toggleAvailability,
+  deleteItem: s.deleteItem,
+});

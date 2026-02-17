@@ -15,7 +15,7 @@ const StatsCards = ({ stats, showUnavailable = false }: Props) => {
     {
       label: "Total Items",
       value: stats.total,
-      color: "bg-indigo-50 text-indigo-700",
+      color: "bg-blue-50 text-blue-700",
     },
     {
       label: "Available",

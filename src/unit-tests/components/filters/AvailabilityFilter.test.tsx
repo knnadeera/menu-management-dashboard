@@ -1,35 +1,29 @@
-import { describe, it, expect, beforeEach } from "vitest";
+import { describe, it, expect, vi } from "vitest";
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import AvailabilityFilter from "@/components/filters/AvailabilityFilter";
-import { useMenuStore } from "@/stores/menuStore";
 
 describe("AvailabilityFilter component", () => {
-  beforeEach(() => {
-    useMenuStore.setState({
-      selectedAvailability: "All",
-      items: [],
-      loading: false,
-      searchQuery: "",
-      selectedCategory: "All",
-      sortField: "name",
-      sortDirection: "asc",
-    });
-  });
-
   it("renders All / Available / Unavailable buttons", () => {
-    render(<AvailabilityFilter />);
+    const onChange = vi.fn();
+    render(<AvailabilityFilter value="All" onChange={onChange} />);
     expect(screen.getByText("All")).toBeInTheDocument();
     expect(screen.getByText("Available")).toBeInTheDocument();
     expect(screen.getByText("Unavailable")).toBeInTheDocument();
   });
 
-  it("updates selectedAvailability when a button is clicked", async () => {
+  it("calls onChange when a button is clicked", async () => {
     const user = userEvent.setup();
-    render(<AvailabilityFilter />);
+    const onChange = vi.fn();
+    render(<AvailabilityFilter value="All" onChange={onChange} />);
     await user.click(screen.getByText("Available"));
-    expect(useMenuStore.getState().selectedAvailability).toBe("Available");
-    await user.click(screen.getByText("Unavailable"));
-    expect(useMenuStore.getState().selectedAvailability).toBe("Unavailable");
+    expect(onChange).toHaveBeenCalledWith("Available");
+  });
+
+  it("highlights the selected value", () => {
+    const onChange = vi.fn();
+    render(<AvailabilityFilter value="Unavailable" onChange={onChange} />);
+    const btn = screen.getByRole("button", { name: "Unavailable" });
+    expect(btn).toHaveClass("bg-blue-600");
   });
 });

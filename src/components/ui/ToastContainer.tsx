@@ -1,9 +1,11 @@
 import { useEffect } from "react";
-import useToastStore from "@/stores/toastStore";
+import { useShallow } from "zustand/react/shallow";
+import useToastStore, { toastContainerSelector } from "@/stores/toastStore";
 
 const ToastContainer = () => {
-  const toasts = useToastStore((s) => s.toasts);
-  const removeToast = useToastStore((s) => s.removeToast);
+  const { toasts, removeToast } = useToastStore(
+    useShallow(toastContainerSelector),
+  );
 
   useEffect(() => {
     const timers: ReturnType<typeof setTimeout>[] = [];

@@ -1,21 +1,29 @@
-import { useMenuStore } from "@/stores/menuStore";
+import React from "react";
 import { categories } from "@/data/mockData";
 
+export type Category =
+  | (typeof categories)[number]
+  | { id: string; name: string };
 const allCategories = [{ id: "All", name: "All" }, ...categories];
 
-const CategoryFilter = () => {
-  const selectedCategory = useMenuStore((s) => s.selectedCategory);
-  const setSelectedCategory = useMenuStore((s) => s.setSelectedCategory);
+type Props = {
+  value?: string;
+  onChange: (value: string) => void;
+  className?: string;
+};
 
+const CategoryFilter = ({ value = "All", onChange, className }: Props) => {
   return (
-    <div className="flex flex-wrap gap-2">
+    <div className={`flex flex-wrap gap-2 ${className ?? ""}`}>
       {allCategories.map((category) => (
         <button
           key={category.id}
-          onClick={() => setSelectedCategory(category.id)}
+          type="button"
+          onClick={() => onChange(category.id)}
+          aria-pressed={value === category.id}
           className={`px-4 py-2 rounded-full text-sm font-medium transition-colors cursor-pointer ${
-            selectedCategory === category.id
-              ? "bg-indigo-600 text-white shadow-md"
+            value === category.id
+              ? "bg-blue-600 text-white shadow-md"
               : "bg-gray-100 text-gray-700 hover:bg-gray-200"
           }`}
         >

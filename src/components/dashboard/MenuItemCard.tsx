@@ -1,6 +1,7 @@
 import type { IMenuItem } from "@/types/menu.types";
-import { useUIStore } from "@/stores/uiStore";
-import { useMenuStore } from "@/stores/menuStore";
+import { useShallow } from "zustand/react/shallow";
+import { useUIStore, uiActionsSelector } from "@/stores/uiStore";
+import { useMenuStore, menuCardSelector } from "@/stores/menuStore";
 import MenuItemHeader from "./MenuItemHeader";
 import MenuItemBody from "./MenuItemBody";
 import MenuItemActions from "./MenuItemActions";
@@ -10,10 +11,12 @@ interface MenuItemCardProps {
 }
 
 const MenuItemCard = ({ item }: MenuItemCardProps) => {
-  const openEditModal = useUIStore((s) => s.openEditModal);
-  const openConfirmDialog = useUIStore((s) => s.openConfirmDialog);
-  const toggleAvailability = useMenuStore((s) => s.toggleAvailability);
-  const deleteItem = useMenuStore((s) => s.deleteItem);
+  const { openEditModal, openConfirmDialog } = useUIStore(
+    useShallow(uiActionsSelector),
+  );
+  const { toggleAvailability, deleteItem } = useMenuStore(
+    useShallow(menuCardSelector),
+  );
 
   const confirmToggle = (id: string | number) =>
     openConfirmDialog(id, undefined, "Change item status?", (confirmedId) => {
