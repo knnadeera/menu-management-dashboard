@@ -28,4 +28,9 @@ export const useToastStore = create<ToastStore>((set) => ({
   clear: () => set({ toasts: [] }),
 }));
 
+export const toastContainerSelector = (s: ToastStore) => ({
+  toasts: s.toasts,
+  removeToast: s.removeToast,
+});
+
 export default useToastStore;

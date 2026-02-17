@@ -1,5 +1,10 @@
-import { useMenuStore } from "@/stores/menuStore";
+import { useShallow } from "zustand/react/shallow";
+import { useMenuStore, menuDashboardSelector } from "@/stores/menuStore";
 import { useUIStore } from "@/stores/uiStore";
+import {
+  useCurrencyStore,
+  currencyDashboardSelector,
+} from "@/stores/currencyStore";
 import {
   SearchBar,
   CategoryFilter,
@@ -11,9 +16,29 @@ import { CurrencySelector, StatsCards } from "@/components/ui";
 
 const Dashboard = () => {
   const openAddModal = useUIStore((s) => s.openAddModal);
-  const items = useMenuStore((s) => s.items);
-  const loading = useMenuStore((s) => s.loading);
-  const filteredItems = useMenuStore((s) => s.getFilteredItems());
+
+  const {
+    items,
+    loading,
+    filteredItems,
+    searchQuery,
+    setSearchQuery,
+    sortField,
+    sortDirection,
+    setSorting,
+    selectedCategory,
+    setSelectedCategory,
+    selectedAvailability,
+    setSelectedAvailability,
+  } = useMenuStore(useShallow(menuDashboardSelector));
+
+  const {
+    selected: currencySelected,
+    setSelected: setCurrencySelected,
+    rates: currencyRates,
+    loading: currencyLoading,
+    refreshRates,
+  } = useCurrencyStore(useShallow(currencyDashboardSelector));
 
   const stats = {
     total: items.length,
@@ -75,7 +100,7 @@ const Dashboard = () => {
             <div>
               <h1 className="text-2xl font-bold text-gray-900 flex items-center gap-2">
                 <svg
-                  className="w-8 h-8 text-indigo-600"
+                  className="w-8 h-8 text-blue-600"
                   fill="none"
                   stroke="currentColor"
                   viewBox="0 0 24 24"
@@ -96,7 +121,7 @@ const Dashboard = () => {
             <div className="flex items-center gap-4">
               <button
                 onClick={openAddModal}
-                className="inline-flex items-center gap-2 px-4 py-2.5 rounded-lg text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 transition shadow-sm cursor-pointer"
+                className="inline-flex items-center gap-2 px-4 py-2.5 rounded-lg text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 transition shadow-sm cursor-pointer"
               >
                 <svg
                   className="w-5 h-5 text-gray-400"
@@ -115,7 +140,13 @@ const Dashboard = () => {
               </button>
 
               <div className="hidden sm:block">
-                <CurrencySelector />
+                <CurrencySelector
+                  value={currencySelected}
+                  onChange={setCurrencySelected}
+                  refreshRates={refreshRates}
+                  loading={currencyLoading}
+                  rates={currencyRates}
+                />
               </div>
             </div>
           </div>
@@ -128,13 +159,23 @@ const Dashboard = () => {
         <div className="space-y-4 mb-8">
           <div className="flex flex-col md:flex-row gap-4">
             <div className="flex-1">
-              <SearchBar />
+              <SearchBar value={searchQuery} onChange={setSearchQuery} />
             </div>
-            <SortButtons />
+            <SortButtons
+              sortField={sortField}
+              sortDirection={sortDirection}
+              onChange={setSorting}
+            />
           </div>
           <div className="flex flex-wrap items-center gap-4 justify-between">
-            <CategoryFilter />
-            <AvailabilityFilter />
+            <CategoryFilter
+              value={selectedCategory}
+              onChange={setSelectedCategory}
+            />
+            <AvailabilityFilter
+              value={selectedAvailability}
+              onChange={setSelectedAvailability}
+            />
           </div>
         </div>
 

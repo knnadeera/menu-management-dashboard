@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
-import { useMenuStore } from "@/stores/menuStore";
-import { useUIStore } from "@/stores/uiStore";
+import { useShallow } from "zustand/react/shallow";
+import { useMenuStore, menuFormSelector } from "@/stores/menuStore";
+import { useUIStore, uiFormSelector } from "@/stores/uiStore";
 import { categories } from "@/data/mockData";
 import type { TStatus } from "@/types/menu.types";
 import Input from "@/components/inputs/Input";
@@ -9,12 +10,9 @@ import Dropdown from "@/components/inputs/Dropdown";
 import PopupModal from "@/components/ui/PopupModal";
 
 const MenuItemForm = () => {
-  const isModalOpen = useUIStore((s) => s.isModalOpen);
-  const editingItem = useUIStore((s) => s.editingItem);
-  const closeModal = useUIStore((s) => s.closeModal);
-  const openConfirmDialog = useUIStore((s) => s.openConfirmDialog);
-  const addItem = useMenuStore((s) => s.addItem);
-  const updateItem = useMenuStore((s) => s.updateItem);
+  const { isModalOpen, editingItem, closeModal, openConfirmDialog } =
+    useUIStore(useShallow(uiFormSelector));
+  const { addItem, updateItem } = useMenuStore(useShallow(menuFormSelector));
 
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
@@ -169,7 +167,7 @@ const MenuItemForm = () => {
             }
             className={`w-full px-3 py-2 rounded-lg border ${
               errors.name ? "border-red-500" : "border-gray-300"
-            } focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent`}
+            } focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent`}
             placeholder="e.g. Grilled Chicken"
           />
         </div>
@@ -191,7 +189,7 @@ const MenuItemForm = () => {
             }
             className={`w-full px-3 py-2 rounded-lg border ${
               errors.description ? "border-red-500" : "border-gray-300"
-            } focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent resize-none`}
+            } focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none`}
             placeholder="Describe the dish..."
           />
         </div>
@@ -219,7 +217,7 @@ const MenuItemForm = () => {
                 const num = Number(v);
                 return v !== "" && !Number.isNaN(num) && num > 0;
               }}
-              className={`w-full px-3 py-2 rounded-lg border ${errors.price ? "border-red-500" : "border-gray-300"} focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent`}
+              className={`w-full px-3 py-2 rounded-lg border ${errors.price ? "border-red-500" : "border-gray-300"} focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent`}
               placeholder="0.00"
             />
           </div>
@@ -231,7 +229,7 @@ const MenuItemForm = () => {
               options={categories}
               value={category}
               onChange={(e) => setCategory(e.target.value)}
-              className="w-full px-3 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent bg-white"
+              className="w-full px-3 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white"
             />
           </div>
         </div>
@@ -251,7 +249,7 @@ const MenuItemForm = () => {
                 return rest;
               })
             }
-            className={`w-full px-3 py-2 rounded-lg border ${errors.image ? "border-red-500" : "border-gray-300"} focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent`}
+            className={`w-full px-3 py-2 rounded-lg border ${errors.image ? "border-red-500" : "border-gray-300"} focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent`}
             placeholder="https://example.com/image.jpg"
           />
           {image && !errors.image && (
@@ -290,7 +288,7 @@ const MenuItemForm = () => {
           <div
             role="switch"
             aria-checked={status === "active"}
-            className={`relative w-11 h-6 rounded-full transition-colors ${status === "active" ? "bg-indigo-600" : "bg-gray-300"}`}
+            className={`relative w-11 h-6 rounded-full transition-colors ${status === "active" ? "bg-blue-600" : "bg-gray-300"}`}
             tabIndex={0}
             onKeyDown={(e) => {
               if (e.key === "Enter" || e.key === " ") {
@@ -320,7 +318,7 @@ const MenuItemForm = () => {
           <button
             type="submit"
             disabled={submitting}
-            className={`px-5 py-2.5 rounded-lg text-sm font-medium text-white ${submitting ? "bg-indigo-400 cursor-not-allowed" : "bg-indigo-600 hover:bg-indigo-700"} transition shadow-sm`}
+            className={`px-5 py-2.5 rounded-lg text-sm font-medium text-white ${submitting ? "bg-blue-400 cursor-not-allowed" : "bg-blue-600 hover:bg-blue-700"} transition shadow-sm`}
           >
             {buttonText}
           </button>

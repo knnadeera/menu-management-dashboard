@@ -55,3 +55,25 @@ export const useUIStore = create<UIStore>((set) => ({
       confirmCallback: null,
     }),
 }));
+
+export const uiFormSelector = (s: UIStore) => ({
+  isModalOpen: s.isModalOpen,
+  editingItem: s.editingItem,
+  closeModal: s.closeModal,
+  openConfirmDialog: s.openConfirmDialog,
+});
+
+export const uiConfirmSelector = (s: UIStore) => ({
+  isConfirmOpen: s.isConfirmOpen,
+  deletingItemId: s.deletingItemId,
+  confirmType: s.confirmType,
+  confirmMessage: s.confirmMessage,
+  confirmCallback: s.confirmCallback,
+  openConfirmDialog: s.openConfirmDialog,
+  closeConfirmDialog: s.closeConfirmDialog,
+});
+
+export const uiActionsSelector = (s: UIStore) => ({
+  openEditModal: s.openEditModal,
+  openConfirmDialog: s.openConfirmDialog,
+});

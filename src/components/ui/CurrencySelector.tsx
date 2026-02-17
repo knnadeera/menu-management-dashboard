@@ -1,32 +1,42 @@
 import { useEffect } from "react";
-import { SUPPORTED_CURRENCIES, useCurrencyStore } from "@/stores/currencyStore";
+import { SUPPORTED_CURRENCIES } from "@/stores/currencyStore";
 import Dropdown from "@/components/inputs/Dropdown";
 
-const CurrencySelector = () => {
-  const selected = useCurrencyStore((s) => s.selected);
-  const setSelected = useCurrencyStore((s) => s.setSelected);
-  const refreshRates = useCurrencyStore((s) => s.refreshRates);
-  const loading = useCurrencyStore((s) => s.loading);
-  const rates = useCurrencyStore((s) => s.rates);
+type Props = {
+  value: string;
+  onChange: (value: string) => void;
+  refreshRates?: () => Promise<void>;
+  loading?: boolean;
+  rates?: Record<string, number>;
+  className?: string;
+};
 
+const CurrencySelector = ({
+  value,
+  onChange,
+  refreshRates,
+  loading,
+  rates,
+  className = "",
+}: Props) => {
   useEffect(() => {
-    refreshRates();
+    if (refreshRates) refreshRates().catch(() => {});
   }, [refreshRates]);
 
   useEffect(() => {
-    if (selected !== "LKR" && !rates[selected] && !loading) {
+    if (refreshRates && value !== "LKR" && rates && !rates[value] && !loading) {
       refreshRates().catch(() => {});
     }
-  }, [selected, rates, loading, refreshRates]);
+  }, [value, rates, loading, refreshRates]);
 
   return (
-    <div className="flex items-center gap-3">
+    <div className={`flex items-center gap-3 ${className}`}>
       <Dropdown
         id="currency-select"
-        value={selected}
+        value={value}
         options={SUPPORTED_CURRENCIES}
         dropConfig={{ labelField: "label", valueField: "code" }}
-        onChange={(e) => setSelected(e.target.value)}
+        onChange={(e) => onChange(e.target.value)}
         className="rounded-md border border-gray-300 bg-white px-3 py-2 text-sm"
       />
     </div>
