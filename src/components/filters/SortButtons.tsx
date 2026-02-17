@@ -1,4 +1,3 @@
-import React from "react";
 import { TSortField } from "@/types/menu.types";
 
 const sortOptions: { label: string; field: TSortField }[] = [
