@@ -31,7 +31,7 @@ describe("SearchBar component", () => {
 
   it("shows clear button when text is entered", async () => {
     const onChange = vi.fn();
-    const user = userEvent.setup({ advanceTimers: vi.advanceTimersByTime });
+    userEvent.setup({ advanceTimers: vi.advanceTimersByTime });
     render(<SearchBar value="test" onChange={onChange} />);
     const buttons = screen.getAllByRole("button");
     expect(buttons.length).toBeGreaterThan(0);
